@@ -13,6 +13,15 @@ This project was developed as an **advanced TypeScript capstone**, focused on co
 
 ---
 
+## Live Demo
+
+**▶ Try it now:**
+`https://ts-kanban-board-app.vercel.app/`
+
+> Board state, theme, filters, and backup data persist locally in the browser using `localStorage`.
+
+---
+
 ## About
 
 The **TypeScript Kanban Board** is a browser-based productivity app designed to push the limits of TypeScript without relying on frameworks like React or Vue.
