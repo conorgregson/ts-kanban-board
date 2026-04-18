@@ -16,7 +16,7 @@ This project was developed as an **advanced TypeScript capstone**, focused on co
 ## Live Demo
 
 **▶ Try it now:**
-`https://ts-kanban-board-app.vercel.app/`
+`https://ts-kanban-board-app.vercel.app`
 
 > Board state, theme, filters, and backup data persist locally in the browser using `localStorage`.
 
