@@ -72,14 +72,14 @@ function hashLabel(str: string, mod = 10): number {
 
 function getLabelColorName(label: string): string {
   const key = label.trim().toLowerCase();
-  let colorName = LABEL_COLORS[key];
+  const mappedColor = LABEL_COLORS[key];
 
-  if (!colorName) {
-    const index = hashLabel(key, COLOR_NAMES.length);
-    colorName = COLOR_NAMES[index];
+  if (mappedColor) {
+    return mappedColor;
   }
 
-  return colorName;
+  const index = hashLabel(key, COLOR_NAMES.length);
+  return COLOR_NAMES[index] ?? "grey";
 }
 
 export function renderTaskLabels(
