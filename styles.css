@@ -1,0 +1,425 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #0b1220;
+  --fg: #e7ecf3;
+  --muted: #8aa0b6;
+  --panel: #121a2b;
+  --card: #151f33;
+  --accent: #3b82f6;
+  --accent-fg: #031027;
+
+  --theme-animation: 260ms ease;
+}
+
+/* Themes */
+[data-theme="sky"] {
+  --bg: #0b1220;
+  --fg: #e7ecf3;
+  --muted: #8aa0b6;
+  --panel: #121a2b;
+  --card: #151f33;
+  --accent: #3b82f6;
+  --accent-fg: #031027;
+}
+
+[data-theme="grape"] {
+  --bg: #1a1122;
+  --fg: #f0eaff;
+  --muted: #bfa9e8;
+  --panel: #221733;
+  --card: #2a1d3f;
+  --accent: #a855f7;
+  --accent-fg: #1a0b2a;
+}
+
+[data-theme="slate"] {
+  --bg: #0b0f14;
+  --fg: #e5edf5;
+  --muted: #9fb3c7;
+  --panel: #121820;
+  --card: #151d27;
+  --accent: #64748b;
+  --accent-fg: #05070a;
+}
+
+[data-theme="sunset"] {
+  --bg: #1d0f12;
+  --fg: #ffeae4;
+  --muted: #f4b8a7;
+  --panel: #2a1518;
+  --card: #341a1d;
+  --accent: #fb7185;
+  --accent-fg: #24070b;
+}
+
+[data-theme="forest"] {
+  --bg: #0e1411;
+  --fg: #e4f1e7;
+  --muted: #9db8a7;
+  --panel: #15201b;
+  --card: #1b2922;
+  --accent: #22c55e;
+  --accent-fg: #05140a;
+}
+
+[data-theme="ocean"] {
+  --bg: #08131a;
+  --fg: #e2f1ff;
+  --muted: #9fc3d9;
+  --panel: #0f202a;
+  --card: #142a38;
+  --accent: #0ea5e9;
+  --accent-fg: #021017;
+}
+
+[data-theme="sand"] {
+  --bg: #1c1610;
+  --fg: #f9ede0;
+  --muted: #e6c8a8;
+  --panel: #2a2018;
+  --card: #34281e;
+  --accent: #facc15;
+  --accent-fg: #1c1404;
+}
+
+[data-theme="rose"] {
+  --bg: #1a0e12;
+  --fg: #ffe4ec;
+  --muted: #f3acc2;
+  --panel: #26141b;
+  --card: #32181f;
+  --accent: #ec4899;
+  --accent-fg: #240714;
+}
+
+.bg-bg {
+  background: var(--bg);
+}
+
+.text-fg {
+  color: var(--fg);
+}
+
+.bg-panel {
+  background: var(--panel);
+}
+
+.bg-card {
+  background: var(--card);
+}
+
+.bg-accent {
+  background: var(--accent);
+}
+
+.text-accent-fg {
+  color: var(--accent-fg);
+}
+
+.bg-muted {
+  background: color-mix(in oklab, var(--fg) 8%, var(--bg));
+}
+
+.border-muted {
+  border-color: var(--muted);
+}
+
+/* Task labels */
+.task-label {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.45rem;
+  border-radius: 999px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+/* Dynamic label colors */
+.label-color-red {
+  background: #ef4444;
+  color: white;
+}
+
+.label-color-orange {
+  background: #f97316;
+  color: white;
+}
+
+.label-color-yellow {
+  background: #eab308;
+  color: white;
+}
+
+.label-color-lime {
+  background: #84cc16;
+  color: white;
+}
+
+.label-color-green {
+  background: #22c55e;
+  color: white;
+}
+
+.label-color-emerald {
+  background: #10b981;
+  color: white;
+}
+
+.label-color-cyan {
+  background: #06b6d4;
+  color: white;
+}
+
+.label-color-blue {
+  background: #3b82f6;
+  color: white;
+}
+
+.label-color-violet {
+  background: #8b5cf6;
+  color: white;
+}
+
+.label-color-pink {
+  background: #ec4899;
+  color: white;
+}
+
+.label-color-grey {
+  background: #6b7280;
+  color: white;
+}
+
+/* Label editor */
+.label-editor {
+  position: relative;
+  z-index: 10;
+}
+
+.label-chip {
+  font-size: 0.65rem;
+  background: color-mix(in oklab, var(--panel) 70%, var(--accent) 30%);
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 120ms ease,
+    opacity 120ms ease,
+    border-color 120ms ease,
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.label-chip:hover {
+  transform: translateY(-1px);
+}
+
+.label-chip--active {
+  border-color: var(--fg);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.3);
+  opacity: 1;
+}
+
+.label-chip:not(.label-chip--active) {
+  opacity: 0.7;
+}
+
+#filter-labels .label-chip {
+  font-size: 0.7rem;
+  opacity: 0.85;
+}
+
+/* Task cards */
+.kan-task {
+  transition:
+    transform 140ms ease,
+    box-shadow 140ms ease,
+    border-color 140ms ease,
+    background 140ms ease,
+    opacity 140ms ease;
+}
+
+.kan-task:hover {
+  transform: translateY(-1px);
+}
+
+.kan-task--selected {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 10px 24px rgba(0, 0, 0, 0.22);
+}
+
+.kan-task.drag-preview {
+  opacity: 0.6;
+  transform: rotate(2deg) scale(1.02);
+}
+
+/* Column animations and state */
+.kan-column {
+  transform: translateZ(0);
+  transition:
+    transform 150ms ease,
+    box-shadow 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.kan-column.enter {
+  animation: pop-in 200ms ease-out;
+}
+
+.kan-column.column-drop-target {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.14);
+  border-color: rgba(59, 130, 246, 0.22);
+  background: rgba(59, 130, 246, 0.03);
+}
+
+/* Drop zone */
+.task-list.drop-target {
+  border-color: rgba(59, 130, 246, 0.45);
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.task-list .empty-dropzone {
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease;
+}
+
+.task-list.drop-target .empty-dropzone {
+  opacity: 0.95;
+  transform: scale(0.99);
+  border-color: rgba(59, 130, 246, 0.35);
+  background: rgba(59, 130, 246, 0.06);
+}
+
+.task-list .drop-indicator {
+  transition:
+    opacity 120ms ease,
+    top 120ms ease;
+  z-index: 2;
+}
+
+.task-list.drop-target .drop-indicator {
+  opacity: 1;
+}
+
+/* Generic drag target */
+.drop-target {
+  outline: 2px dashed var(--accent);
+  outline-offset: 4px;
+}
+
+/* WIP UI */
+.kan-column.wip-full {
+  ring-color: #ef4444;
+  outline: 2px solid #ef4444;
+  outline-offset: 2px;
+}
+
+.wip-badge {
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+  cursor: pointer;
+}
+
+.wip-badge:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 0.375rem;
+}
+
+/* Theme switching */
+.theme-switching,
+.theme-switching * {
+  transition:
+    background-color var(--theme-animation),
+    color var(--theme-animation),
+    border-color var(--theme-animation),
+    outline-color var(--theme-animation),
+    box-shadow var(--theme-animation),
+    fill var(--theme-animation),
+    stroke var(--theme-animation);
+}
+
+.theme-switching #board {
+  opacity: 0.85;
+  transition: opacity var(--theme-animation);
+}
+
+/* Bulk bar */
+#bulk-actions {
+  transition:
+    opacity 120ms ease,
+    transform 120ms ease;
+}
+
+#bulk-actions.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-4px);
+}
+
+/* Toasts */
+.toast {
+  min-width: 220px;
+  max-width: 320px;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: var(--fg);
+  background: color-mix(in oklab, var(--panel) 80%, var(--accent) 20%);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+.toast--success {
+  border: 1px solid #22c55e;
+}
+
+.toast--error {
+  border: 1px solid #ef4444;
+}
+
+.toast--info {
+  border: 1px solid var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --theme-animation: 1ms linear;
+  }
+
+  .kan-column,
+  .kan-task,
+  .task-list .empty-dropzone,
+  .task-list .drop-indicator,
+  .label-chip,
+  #bulk-actions,
+  .theme-switching,
+  .theme-switching * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

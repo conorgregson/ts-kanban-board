@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en" class="h-full" data-theme="sky">
+  <head>
+    <meta charset="utf-8" />
+    <title>Kanban Board (TypeScript)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="h-full bg-bg text-fg">
+    <header
+      class="p-4 flex items-center justify-between gap-4 border-b border-muted/30"
+    >
+      <h1 class="text-2xl font-semibold">Kanban Board</h1>
+
+      <div class="flex flex-wrap items-center gap-2">
+        <select id="theme-select" class="px-3 py-2 rounded-md bg-muted text-fg">
+          <option value="sky">Sky</option>
+          <option value="grape">Grape</option>
+          <option value="slate">Slate</option>
+          <option value="sunset">Sunset</option>
+          <option value="forest">Forest</option>
+          <option value="ocean">Ocean</option>
+          <option value="sand">Sand</option>
+          <option value="rose">Rose</option>
+        </select>
+
+        <button
+          id="add-column-btn"
+          type="button"
+          class="px-3 py-2 rounded-md bg-accent text-accent-fg hover:opacity-90 transition"
+        >
+          + Column
+        </button>
+
+        <button
+          id="reset-btn"
+          type="button"
+          class="px-3 py-2 rounded-md bg-muted hover:opacity-90 transition"
+        >
+          Reset
+        </button>
+
+        <button
+          id="export-btn"
+          type="button"
+          class="px-3 py-2 rounded-md bg-muted hover:opacity-90 transition"
+        >
+          Export JSON
+        </button>
+
+        <button
+          id="import-btn"
+          type="button"
+          class="px-3 py-2 rounded-md bg-muted hover:opacity-90 transition"
+        >
+          Import JSON
+        </button>
+
+        <button
+          id="restore-backup-btn"
+          type="button"
+          class="px-3 rounded-md bg-muted hover:opacity-90 transition"
+        >
+          Restore Backup
+        </button>
+
+        <span
+          id="backup-status"
+          class="text-xs px-2 rounded-md bg-muted/40 text-fg/80 whitespace-nowrap"
+          >No backup yet</span
+        >
+
+        <input id="import-file" type="file" accept=".json" hidden />
+      </div>
+    </header>
+
+    <main class="p-4 space-y-3">
+      <section class="flex flex-wrap items-center gap-2">
+        <input
+          id="filter-text"
+          type="text"
+          class="px-2 py-2 rounded-md bg-panel border border-muted/40 text-sm flex-1 min-w-40"
+          placeholder="Filter tasks by text..."
+        />
+        <div id="filter-labels" class="flex flex-wrap gap-1"></div>
+        <button
+          id="filter-clear-btn"
+          type="button"
+          class="px-2 py-1 rounded-md bg-muted hover:opacity-90 text-xs"
+        >
+          Clear filters
+        </button>
+      </section>
+
+      <section
+        id="bulk-actions"
+        class="hidden p-2 rounded-md bg-panel border border-muted/40 items-center gap-3 text-sm"
+      >
+        <span id="bulk-count" class="opacity-80">0 selected</span>
+
+        <button
+          id="bulk-clear"
+          type="button"
+          class="px-2 py-2 rounded bg-muted hover:opacity-90"
+        >
+          Clear
+        </button>
+
+        <button
+          id="bulk-delete"
+          type="button"
+          class="px-2 py-1 rounded bg-red-500 text-white hover:bg-red-600"
+        >
+          Delete
+        </button>
+
+        <button
+          id="bulk-label"
+          type="button"
+          class="px-2 py-1 rounded bg-accent text-accent-fg hover:opacity-90"
+        >
+          Labels...
+        </button>
+
+        <select
+          id="bulk-move"
+          class="px-2 py-1 rounded bg-card border border-muted/40"
+        ></select>
+      </section>
+
+      <section
+        id="board"
+        class="grid auto-cols-[minmax(280px,1fr)] grid-flow-col gap-4 overflow-x-auto will-change-transform"
+      ></section>
+    </main>
+
+    <template id="template-column">
+      <article
+        class="kan-column bg-panel rounded-2xl p-3 ring-1 ring-muted/40 min-h-65 flex flex-col gap-2 transition-all duration-150"
+      >
+        <header class="flex flex-wrap items-center gap-2">
+          <input
+            class="column-title basis-full sm:basis-auto flex-1 bg-transparent font-semibold rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-accent/50"
+          />
+          <span
+            class="wip-badge text-xs px-2 py-1 rounded-md bg-muted/40 ring-1 ring-muted/30"
+          ></span>
+          <button
+            class="set-wip-btn px-2 py-1 rounded-md bg-muted text-xs sm:text-sm"
+          >
+            Set
+          </button>
+          <button
+            class="add-task-btn px-2 py-1 rounded-md bg-accent text-accent-fg text-xs sm:text-sm"
+          >
+            + Task
+          </button>
+          <button
+            class="del-column-btn px-2 py-1 rounded-md bg-muted text-xs sm:text-sm"
+          >
+            &#10005;
+          </button>
+        </header>
+
+        <div
+          class="task-list flex-1 flex flex-col gap-2 mt-1 min-h-30 rounded-xl border border-dashed border-transparent transition relative"
+          data-dropzone="tasks"
+        >
+          <div
+            class="drop-indicator absolute left-2 right-2 h-0.5 rounded-full bg-accent opacity-0 pointer-events-none"
+            aria-hidden="true"
+          ></div>
+
+          <div
+            class="empty-dropzone text-sm text-fg/55 border border-dashed border-muted/40 rounded-xl px-4 py-6 text-center pointer-events-none select-none"
+          >
+            <div class="font-medium">Drop task here</div>
+            <div class="text-xs mt-1 opacity-80">
+              or click + Task to add one
+            </div>
+          </div>
+        </div>
+      </article>
+    </template>
+
+    <template id="template-task">
+      <div
+        class="kan-task bg-card rounded-xl p-3 shadow-sm ring-1 ring-muted/30 cursor-grab active:cursor-grabbing select-none"
+        draggable="true"
+        data-draggable="task"
+      >
+        <div class="flex items-center justify-between gap-2">
+          <div
+            class="text-sm font-medium task-title"
+            title="Double-click to rename"
+          ></div>
+          <button
+            class="edit-labels-btn text-xs px-2 py-0.5 rounded-full bg-muted/60 hover:bg-muted transition"
+            title="Edit labels/tags"
+          >
+            🏷
+          </button>
+        </div>
+
+        <div class="task-labels flex flex-wrap gap-1 mt-1"></div>
+        <div class="text-xs opacity-70 task-meta"></div>
+
+        <div
+          class="label-editor hidden mt-2 p-2 rounded-md bg-panel ring-1 ring-muted/40 text-xs"
+        >
+          <div class="mb-1 text-[0.7rem] opacity-80">
+            Labels (click to toggle)
+          </div>
+          <div class="label-editor-chips flex flex-wrap gap-1 mb-2"></div>
+          <div class="flex flex-wrap gap-1 items-center">
+            <input
+              type="text"
+              class="label-editor-input flex-1 px-1 py-0.5 rounded bg-card border border-muted/50"
+              placeholder="Custom labels... (comma-separated)"
+            />
+            <button
+              class="label-editor-save px-2 py-0.5 rounded bg-accent text-accent-fg"
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <div
+      id="toast"
+      class="fixed bottom-4 right-4 flex flex-col gap-2 z-50"
+    ></div>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
